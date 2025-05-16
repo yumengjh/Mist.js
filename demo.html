@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petite Vue Demo - Development</title>
+</head>
+<body>
+    <div id="app">
+        <p>Count: {{ count }}</p>
+        <button @click="increment">+1</button>
+        <p>Double: {{ doubleCount }}</p>
+        <button @click="reset">重置</button>
+        <div @vue:mounted="mounted"></div>
+    </div>
+
+    <script type="module">
+        // 导入开发代码
+        import { createApp } from './src/index.ts'
+        
+        const app = createApp({
+            count: 0,
+            
+            get doubleCount() {
+                return this.count * 2
+            },
+
+            increment() {
+                this.count++
+                console.log('计数增加:', this.count)
+            },
+
+            reset() {
+                this.count = 0
+                console.log('重置计数')
+            },
+
+            mounted() {
+                console.log('应用挂载完成')
+            }
+        })
+
+        app.mount('#app')
+    </script>
+</body>
+</html>

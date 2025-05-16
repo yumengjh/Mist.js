@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petite Vue Demo</title>
+    <!-- <script src="./dist/petite-vue.iife.js"></script> -->
+
+</head>
+
+<body>
+    <div v-scope="{ count: 0 }">
+        <p>Count: {{ count }}</p>
+        <button @click="count++">Increment</button>
+
+        <div v-effect="$el.style.color = count > 5 ? 'red' : 'black'">
+            {{ count }}
+        </div>
+    </div>
+    <script type="module">
+        import { createApp } from './dist/petite-vue.es.js'
+        // 全局挂载
+        createApp({
+            count: 0,
+
+        }).mount()
+    </script>
+</body>
+
+</html>
