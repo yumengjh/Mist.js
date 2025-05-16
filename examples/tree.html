@@ -2,26 +2,41 @@
   import { createApp } from '../src'
 
   const treeData = {
-    name: 'My Tree',
+    name: '1',
     children: [
-      { name: 'hello' },
-      { name: 'wat' },
+      { name: '2' },
+      { name: '3' },
       {
-        name: 'child folder',
+        name: '4',
         children: [
           {
-            name: 'child folder',
-            children: [{ name: 'hello' }, { name: 'wat' }]
+            name: '4-1',
+            children: [{ name: '4-1-1' }, { name: '4-1-2' }]
           },
-          { name: 'hello' },
-          { name: 'wat' },
+          { name: '4-2' },
+          { name: '4-3' },
+          { name: '4-4' },
           {
-            name: 'child folder',
-            children: [{ name: 'hello' }, { name: 'wat' }]
+            name: '4-5',
+            children: [{ name: '4-5-1' }, { name: '4-5-2' }]
           }
         ]
       }
     ]
+  }
+
+  // 生成 ASCII 树状结构
+  function generateAsciiTree(node, prefix = '', isLast = true) {
+    const connector = isLast ? '└── ' : '├── '
+    let result = prefix + connector + node.name + '\n'
+    
+    if (node.children && node.children.length) {
+      const newPrefix = prefix + (isLast ? '    ' : '│   ')
+      node.children.forEach((child, index) => {
+        result += generateAsciiTree(child, newPrefix, index === node.children.length - 1)
+      })
+    }
+    return result
   }
 
   function TreeItem(model) {
@@ -54,7 +69,16 @@
 
   createApp({
     TreeItem,
-    treeData
+    treeData,
+    generateAsciiTree,
+    copyAsciiTree() {
+      const asciiTree = generateAsciiTree(this.treeData)
+      navigator.clipboard.writeText(asciiTree).then(() => {
+        alert('ASCII tree structure copied to clipboard!')
+      }).catch(err => {
+        console.error('Copy failed:', err)
+      })
+    }
   }).mount()
 </script>
 
@@ -69,20 +93,57 @@
   </ul>
 </template>
 
-<p>Double click an item to turn it into a folder.</p>
-<ul v-scope>
-  <li class="item" v-scope="TreeItem(treeData)"></li>
-</ul>
+<div class="container">
+  <div class="tree-container">
+    <p>Double click an item to turn it into a folder.</p>
+    <ul v-scope>
+      <li class="item" v-scope="TreeItem(treeData)"></li>
+    </ul>
+  </div>
+  
+  <div class="ascii-container" v-scope>
+    <h3>ASCII Tree Structure</h3>
+    <pre class="ascii-tree">{{ generateAsciiTree(treeData) }}</pre>
+    <button @click="copyAsciiTree">Copy ASCII Tree</button>
+  </div>
+</div>
 
 <style>
   body {
     font-family: Menlo, Consolas, monospace;
     color: #444;
   }
+  .container {
+    display: flex;
+    gap: 2rem;
+    padding: 1rem;
+  }
+  .tree-container, .ascii-container {
+    flex: 1;
+  }
   .item {
     cursor: pointer;
   }
   .bold {
     font-weight: bold;
+  }
+  .ascii-tree {
+    background: #f5f5f5;
+    padding: 1rem;
+    border-radius: 4px;
+    white-space: pre;
+    font-family: monospace;
+    margin: 1rem 0;
+  }
+  button {
+    padding: 0.5rem 1rem;
+    background: #42b983;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #3aa876;
   }
 </style>
