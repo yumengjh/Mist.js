@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Dice Demo</title>
+    <script src="../dist/petite-vue.iife.js"></script>
+    <style>
+        .scene {
+            width: 200px;
+            height: 200px;
+            margin: 80px;
+            perspective: 600px; 
+        }
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: translateZ(-100px);
+            transition: transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .cube__face {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 2px solid black;
+            line-height: 200px;
+            font-size: 40px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+        }
+        .cube__face--front  { transform: rotateY(0deg) translateZ(100px); }
+        .cube__face--right  { transform: rotateY(90deg) translateZ(100px); }
+        .cube__face--back   { transform: rotateY(180deg) translateZ(100px); }
+        .cube__face--left   { transform: rotateY(-90deg) translateZ(100px); }
+        .cube__face--top    { transform: rotateX(90deg) translateZ(100px); }
+        .cube__face--bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+        .cube.show-front  { transform: translateZ(-100px) rotateY(0deg); }
+        .cube.show-right  { transform: translateZ(-100px) rotateY(-90deg); }
+        .cube.show-back   { transform: translateZ(-100px) rotateY(-180deg); }
+        .cube.show-left   { transform: translateZ(-100px) rotateY(90deg); }
+        .cube.show-top    { transform: translateZ(-100px) rotateX(-90deg); }
+        .cube.show-bottom { transform: translateZ(-100px) rotateX(90deg); }
+    </style>
+</head>
+
+<body>
+    <div v-scope>
+        <div class="scene">
+            <div class="cube" :class="currentClass">
+                <div class="cube__face cube__face--front">1</div>
+                <div class="cube__face cube__face--back">6</div>
+                <div class="cube__face cube__face--right">2</div>
+                <div class="cube__face cube__face--left">5</div>
+                <div class="cube__face cube__face--top">3</div>
+                <div class="cube__face cube__face--bottom">4</div>
+            </div>
+        </div>
+        <button @click="rollDice">掷骰子</button>
+    </div>
+    <script>
+        PetiteVue.createApp({
+            currentClass: 'show-front',
+            rollDice() {
+                console.log('rolling dice...'); // 添加调试日志
+                const classes = ['show-front', 'show-right', 'show-back', 'show-left', 'show-top', 'show-bottom'];
+                const randomClass = classes[Math.floor(Math.random() * classes.length)];
+                this.currentClass = randomClass;
+            }
+        }).mount()
+    </script>
+</body>
+
+</html>

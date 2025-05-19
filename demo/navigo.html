@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigo 路由功能演示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        #app {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 导航菜单样式 */
+        nav {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #666;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        nav a.active {
+            background: #4CAF50;
+            color: white;
+        }
+
+        /* 内容区域样式 */
+        #content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .page {
+            display: none;
+            padding: 20px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        /* 功能说明卡片 */
+        .feature-card {
+            background: #f8f9fa;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        .feature-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #45a049;
+        }
+
+        /* 嵌套路由样式 */
+        #nested-content {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        /* 参数显示样式 */
+        .param-display {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- 导航菜单 -->
+        <nav>
+            <a href="/" data-navigo>首页</a>
+            <a href="/foo" data-navigo>基础路由</a>
+            <a href="/bar" data-navigo>路由参数</a>
+            <a href="/user/123" data-navigo>动态路由</a>
+            <a href="/search?q=test" data-navigo>查询参数</a>
+            <a href="/nested" data-navigo>嵌套路由</a>
+            <a href="/protected" data-navigo>路由守卫</a>
+        </nav>
+
+        <!-- 页面内容 -->
+        <div id="content">
+            <div id="home" class="page">
+                <h2>Navigo 路由功能演示</h2>
+                <div class="feature-card">
+                    <h3>基础路由</h3>
+                    <p>演示简单的页面导航功能，点击导航菜单可以切换不同页面。</p>
+                </div>
+                <div class="feature-card">
+                    <h3>路由参数</h3>
+                    <p>展示如何获取和使用路由参数，如用户ID等动态数据。</p>
+                </div>
+                <div class="feature-card">
+                    <h3>查询参数</h3>
+                    <p>演示如何处理URL查询参数，如搜索关键词等。</p>
+                </div>
+                <div class="feature-card">
+                    <h3>嵌套路由</h3>
+                    <p>展示父子路由的嵌套关系，可以在同一页面显示不同内容。</p>
+                </div>
+                <div class="feature-card">
+                    <h3>路由守卫</h3>
+                    <p>演示路由权限控制，未登录用户无法访问受保护页面。</p>
+                </div>
+            </div>
+
+            <div id="foo" class="page">
+                <h2>基础路由示例</h2>
+                <p>这是一个基础路由页面，展示了简单的页面切换功能。</p>
+                <div class="param-display">
+                    当前路径: <span id="current-path"></span>
+                </div>
+            </div>
+
+            <div id="bar" class="page">
+                <h2>路由参数示例</h2>
+                <p>这个页面展示了如何获取和使用路由参数。</p>
+                <div class="param-display">
+                    路由参数: <span id="route-params"></span>
+                </div>
+            </div>
+
+            <div id="user" class="page">
+                <h2>动态路由示例</h2>
+                <p>这个页面展示了如何处理动态路由参数。</p>
+                <div class="param-display">
+                    用户ID: <span id="user-id"></span>
+                </div>
+            </div>
+
+            <div id="search" class="page">
+                <h2>查询参数示例</h2>
+                <p>这个页面展示了如何处理URL查询参数。</p>
+                <div class="param-display">
+                    搜索关键词: <span id="search-query"></span>
+                </div>
+            </div>
+
+            <div id="nested" class="page">
+                <h2>嵌套路由示例</h2>
+                <p>这个页面展示了嵌套路由的使用。</p>
+                <div class="btn-group">
+                    <a href="/nested/child1" data-navigo class="btn">子路由1</a>
+                    <a href="/nested/child2" data-navigo class="btn">子路由2</a>
+                </div>
+                <div id="nested-content" class="param-display">
+                    子路由内容将显示在这里
+                </div>
+            </div>
+
+            <div id="protected" class="page">
+                <h2>路由守卫示例</h2>
+                <p>这个页面受路由守卫保护，未登录用户将被重定向到首页。</p>
+                <div class="param-display">
+                    认证状态: <span id="auth-status">未登录</span>
+                </div>
+                <button class="btn" onclick="toggleAuth()">切换登录状态</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/navigo@8.11.1/lib/navigo.min.js"></script>
+    <script>
+        // 认证状态
+        let isAuthenticated = false;
+
+        // 切换认证状态
+        function toggleAuth() {
+            isAuthenticated = !isAuthenticated;
+            document.querySelector('#auth-status').textContent = 
+                isAuthenticated ? '已登录' : '未登录';
+        }
+
+        // 创建路由实例
+        const router = new Navigo('/');
+
+        // 全局钩子
+        router.hooks({
+            before: (done, match) => {
+                console.log('全局前置钩子', match);
+                done();
+            },
+            after: (match) => {
+                console.log('全局后置钩子', match);
+                // 更新当前路径显示
+                document.querySelector('#current-path').textContent = match.route.path;
+            }
+        });
+
+        // 路由守卫
+        const authGuard = (done, match) => {
+            if (!isAuthenticated && match.route.path === '/protected') {
+                router.navigate('/');
+                return;
+            }
+            done();
+        };
+
+        // 定义路由
+        router
+            .on('/', () => {
+                showPage('home');
+            })
+            .on('/foo', () => {
+                showPage('foo');
+            })
+            .on('/bar', () => {
+                showPage('bar');
+                document.querySelector('#route-params').textContent = 
+                    JSON.stringify(router.getCurrentLocation());
+            })
+            .on('/user/:id', (match) => {
+                showPage('user');
+                document.querySelector('#user-id').textContent = match.data.id;
+            })
+            .on('/search', (match) => {
+                showPage('search');
+                const query = new URLSearchParams(window.location.search).get('q');
+                document.querySelector('#search-query').textContent = query;
+            })
+            .on('/nested', () => {
+                showPage('nested');
+            })
+            .on('/nested/child1', () => {
+                showPage('nested');
+                document.querySelector('#nested-content').innerHTML = 
+                    '<h3>子路由1内容</h3><p>这是第一个子路由的内容</p>';
+            })
+            .on('/nested/child2', () => {
+                showPage('nested');
+                document.querySelector('#nested-content').innerHTML = 
+                    '<h3>子路由2内容</h3><p>这是第二个子路由的内容</p>';
+            })
+            .on('/protected', () => {
+                showPage('protected');
+            }, {
+                before: authGuard
+            })
+            .notFound(() => {
+                document.querySelector('#content').innerHTML = 
+                    '<h2>404 - 页面未找到</h2><p>抱歉，您访问的页面不存在。</p>';
+            });
+
+        // 页面显示控制
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.querySelector(`#${pageId}`).classList.add('active');
+        }
+
+        // 导航链接处理
+        document.querySelectorAll('[data-navigo]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                router.navigate(link.getAttribute('href'));
+            });
+        });
+
+        // 路由状态管理
+        router.on('*', (match) => {
+            document.querySelectorAll('[data-navigo]').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === match.route.path) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // 启动路由
+        router.resolve();
+    </script>
+</body>
+</html>
