@@ -1,51 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Petite Vue Demo - Development</title>
+    <!-- <script src="../dist/petite-vue.iife.js" defer init></script> -->
     <style>
-        [v-cloak] {
-            display: none;
+        .vue-root {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .normal {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #999;
+            border-radius: 4px;
         }
     </style>
 </head>
+
 <body>
-    <div id="app" v-cloak>
-        <p>Count: {{ count }}</p>
-        <button @click="increment">+1</button>
-        <p>Double: {{ doubleCount }}</p>
-        <button @click="reset">重置</button>
-        <div @vue:mounted="mounted"></div>
+    <div class="vue-root">
+        <h3 v-html="`<span>Vue 应用区域 ${str}</span>`"></h3>
+        <p>局部状态：{{ str }}</p>
+        <p>全局状态：{{ store.str }}</p>
+        <button @click="str = '已更新'">更新局部状态</button>
+        <button @click="store.str = '已更新全局'">更新全局状态</button>
+        <button @click.once="unmount">卸载应用</button>
+    </div>
+
+    <div class="normal">
+        <h3>普通区域</h3>
+        <p>这里的内容不会被编译：{{ message }}</p>
     </div>
 
     <script type="module">
-        // 导入开发代码
-        import { createApp } from '../src/index.ts'
+        import { createApp, reactive } from '../dist/petite-vue.es.js'
         
+        // 全局状态
+        const store = reactive({
+            str: 'hello world'
+        })
+        
+        // 创建应用实例
         const app = createApp({
-            count: 0,
-            
-            get doubleCount() {
-                return this.count * 2
-            },
-
-            increment() {
-                this.count++
-                console.log('计数增加:', this.count)
-            },
-
-            reset() {
-                this.count = 0
-                console.log('重置计数')
-            },
-
-            mounted() {
-                console.log('应用挂载完成')
+            $delimiters: ['{{', '}}'],
+            str: 'hello world',
+            store,
+            // 将卸载方法添加到应用数据中
+            unmount() {
+                app.unmount()
+                console.warn('应用已卸载，数据将不再响应！')
             }
         })
-
-        app.mount('#app')
+        
+        // 挂载应用
+        app.mount('.vue-root')
     </script>
 </body>
+
 </html>
