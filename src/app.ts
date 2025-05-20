@@ -26,11 +26,11 @@ export const createApp = (initialData?: any) => {
   }
 
   // 全局内部辅助函数
-  ctx.scope.$s = toDisplayString
-  ctx.scope.$nextTick = nextTick
-  ctx.scope.$refs = Object.create(null)
+  ctx.scope.$s = toDisplayString  // 将表达式转换为字符串
+  ctx.scope.$nextTick = nextTick  // 调度器
+  ctx.scope.$refs = Object.create(null)  // 创建一个空对象
 
-  let rootBlocks: Block[]
+  let rootBlocks: Block[]   // 根块
 
   return {
     directive(name: string, def?: Directive) {
@@ -57,10 +57,12 @@ export const createApp = (initialData?: any) => {
       if (el.hasAttribute('v-scope')) {
         roots = [el]
       } else {
+        // 只匹配顶层的 v-scope 元素
         roots = [...el.querySelectorAll(`[v-scope]`)].filter(
           (root) => !root.matches(`[v-scope] [v-scope]`)
         )
       }
+      // 如果没有任何根元素，则使用整个文档
       if (!roots.length) {
         roots = [el]
       }
@@ -77,6 +79,7 @@ export const createApp = (initialData?: any) => {
         )
       }
 
+      // 创建根块
       rootBlocks = roots.map((el) => new Block(el, ctx, true))
       return this
     },

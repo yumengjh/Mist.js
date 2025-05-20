@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Petite Vue Demo - Development</title>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <div id="app">
+    <div id="app" v-cloak>
         <p>Count: {{ count }}</p>
         <button @click="increment">+1</button>
         <p>Double: {{ doubleCount }}</p>
