@@ -296,14 +296,6 @@ HTML 内容。
 <div v-cloak>{{ message }}</div>
 ```
 
-### v-ref
-
-引用元素。
-
-```html
-<div v-ref="myRef"></div>
-```
-
 ### v-effect
 
 副作用。

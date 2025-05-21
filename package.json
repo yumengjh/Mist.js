@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/vuejs/petite-vue#readme",
   "devDependencies": {
+    "@types/node": "^22.15.21",
     "@vue/reactivity": "^3.2.27",
     "@vue/shared": "^3.2.27",
     "chalk": "^4.1.1",
