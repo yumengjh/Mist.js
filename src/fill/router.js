@@ -138,6 +138,7 @@ class Router {
         }
     }
 
+    // 后续使用https://github.com/rstacruz/nprogress
     showProgressBar() {
         const bar = document.getElementById('router-progress');
         if (bar) {
