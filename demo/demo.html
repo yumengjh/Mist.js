@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Petite Vue Demo - Development</title>
     <!-- <script src="../dist/petite-vue.iife.js" defer init></script> -->
+    <script src="../src/components/button.ts" type="module"></script>
     <style>
         .vue-root {
             margin: 20px;
@@ -13,50 +14,76 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
         .normal {
             margin: 20px;
             padding: 20px;
             border: 1px solid #999;
             border-radius: 4px;
+            transition: all 0.3s ease-out;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        /* 隐藏状态 */
+        .normal.hidden {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .btn-danger {
+            --btn-bg: rgb(229, 57, 53, 0.4);
+            --btn-color: #616161;
+            --btn-ripple: rgba(229, 57, 53, 0.8);
+            --btn-hover-ripple: rgba(229, 57, 53, 0.7);
+            --btn-active-ripple: rgba(229, 57, 53, 0.3);
+            /* border-radius: 999px; */
         }
     </style>
 </head>
 
 <body>
-    <div class="vue-root">
+    <div class="vue-root" v-cloak>
         <h3 v-html="`<span>Vue 应用区域 ${str}</span>`"></h3>
         <p>局部状态：{{ str }}</p>
-        <p>全局状态：{{ store.str }}</p>
-        <button @click="str = '已更新'">更新局部状态</button>
-        <button @click="store.str = '已更新全局'">更新全局状态</button>
-        <button @click.once="unmount">卸载应用</button>
-    </div>
-
-    <div class="normal">
-        <h3>普通区域</h3>
-        <p>这里的内容不会被编译：{{ message }}</p>
+        <p>全局状态：{{ store.web_str }}</p>
+        <p-button @click="str = '已更新'">更新局部状态</p-button>
+        <p-button @click="store.web_str = '已更新全局'">更新全局状态</p-button>
+        <p-button @click.once="unmount" class="btn-danger">卸载应用</p-button>
+        <p-button @click="show = !show">{{ show ? '隐藏' : '显示' }}子区域</p-button>
+        <div class="normal" :class="{ hidden: !show }">
+            <h3>子区域</h3>
+            <p>message:{{ message }}</p>
+            <p>web_str:{{ store.web_str }}</p>
+        </div>
     </div>
 
     <script type="module">
-        import { createApp, reactive } from '../dist/petite-vue.es.js'
-        
+        import { createApp, reactive } from '../src'
+
         // 全局状态
         const store = reactive({
-            str: 'hello world'
+            web_str: 'hello world'
         })
-        
+
         // 创建应用实例
         const app = createApp({
             $delimiters: ['{{', '}}'],
             str: 'hello world',
+            message: 'hello world',
+            show: false,
             store,
             // 将卸载方法添加到应用数据中
             unmount() {
                 app.unmount()
                 console.warn('应用已卸载，数据将不再响应！')
-            }
+            },
         })
-        
+
         // 挂载应用
         app.mount('.vue-root')
     </script>
