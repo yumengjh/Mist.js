@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
+import viteCompression from 'vite-plugin-compression'
 
 export default defineConfig({
   esbuild: {
@@ -27,5 +28,15 @@ export default defineConfig({
         }
       ]
     }
-  }
+  },
+  plugins: [
+    viteCompression({
+      verbose: true,
+      disable: false,
+      threshold: 10240,
+      algorithm: 'gzip',
+      ext: '.gz',
+      deleteOriginFile: false
+    })
+  ]
 })
