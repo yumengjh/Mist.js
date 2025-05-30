@@ -1,18 +1,18 @@
 {
-  "name": "petite-vue",
-  "version": "0.4.1",
-  "description": "5kb subset of Vue optimized for progressive enhancement",
+  "name": "mist",
+  "version": "0.0.1",
+  "description": "基于PetiteVue进行改造升级的渐进式框架",
   "files": [
     "dist"
   ],
-  "main": "dist/petite-vue.umd.js",
-  "unpkg": "dist/petite-vue.iife.js",
-  "jsdelivr": "dist/petite-vue.iife.js",
-  "module": "./dist/petite-vue.es.js",
+  "main": "dist/mist.umd.js",
+  "unpkg": "dist/mist.iife.js",
+  "jsdelivr": "dist/mist.iife.js",
+  "module": "./dist/mist.es.js",
   "exports": {
     ".": {
-      "import": "./dist/petite-vue.es.js",
-      "require": "./dist/petite-vue.umd.js"
+      "import": "./dist/mist.es.js",
+      "require": "./dist/mist.umd.js"
     }
   },
   "types": "./dist/types/index.d.ts",
@@ -24,17 +24,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuejs/petite-vue.git"
+    "url": "git+https://github.com/yumengjh/Mist.js"
   },
   "keywords": [
     "vue"
   ],
-  "author": "Evan You",
+  "author": "yumengjh",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vuejs/petite-vue/discussions"
+    "url": "https://github.com/yumengjh/Mist.js/issues"
   },
-  "homepage": "https://github.com/vuejs/petite-vue#readme",
+  "homepage": "https://github.com/yumengjh/Mist.js#readme",
   "devDependencies": {
     "@types/node": "^22.15.21",
     "@vue/reactivity": "^3.2.27",

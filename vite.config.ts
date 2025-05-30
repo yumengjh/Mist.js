@@ -11,7 +11,7 @@ export default defineConfig({
     minify: 'terser',
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'PetiteVue',
+      name: 'Mist',
       formats: ['es', 'umd', 'iife']
     },
     rollupOptions: {
