@@ -29,14 +29,14 @@ export default defineConfig({
       ]
     }
   },
-  plugins: [
-    viteCompression({
-      verbose: true,
-      disable: false,
-      threshold: 10240,
-      algorithm: 'gzip',
-      ext: '.gz',
-      deleteOriginFile: false
-    })
-  ]
+  // plugins: [
+  //   viteCompression({
+  //     verbose: true,
+  //     disable: false,
+  //     threshold: 10240,
+  //     algorithm: 'gzip',
+  //     ext: '.gz',
+  //     deleteOriginFile: false
+  //   })
+  // ]
 })
