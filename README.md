@@ -286,7 +286,7 @@ createApp({
 
 ```html
 <script type="module">
-  import { createApp } from 'petite-vue'
+  import { createApp } from '/path/to/mist.js'
   
   createApp({
     // 自定义分隔符为 ${ } 格式
@@ -394,7 +394,7 @@ MIT
 - `@vue/reactivity`: Vue 3 的响应式系统核心
   - 提供 `reactive`、`effect` 等响应式 API
   - 实现依赖收集和触发更新
-  - 是 petite-vue 响应式能力的核心
+  - 是 Mist.js 响应式能力的核心
 
 - `@vue/shared`: Vue 3 的共享工具函数
   - 提供通用的工具函数
