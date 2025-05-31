@@ -20,6 +20,9 @@ jobs:
           node-version: 18
           cache: 'pnpm'  # 使用 pnpm 缓存
 
+      - name: 📦 Install pnpm
+        run: npm install -g pnpm  # 安装 pnpm
+
       - name: 📦 Install dependencies
         run: pnpm install  # 使用 pnpm 安装依赖
 
