@@ -1,50 +1,50 @@
-name: Release Mist.js
+# name: Release Mist.js
 
-on:
-  push:
-    tags:
-      - 'v*'  # 只在打标签（如 v1.0.0）时触发
-  workflow_dispatch:  # 允许手动触发工作流
+# on:
+#   push:
+#     tags:
+#       - 'v*'  # 只在打标签（如 v1.0.0）时触发
+#   workflow_dispatch:  # 允许手动触发工作流
 
-jobs:
-  release:
-    runs-on: ubuntu-latest
+# jobs:
+#   release:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: ⬇️ Checkout repo
-        uses: actions/checkout@v3
+#     steps:
+#       - name: ⬇️ Checkout repo
+#         uses: actions/checkout@v3
 
-      - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: 'npm'  # 使用 npm 缓存
+#       - name: 🟢 Setup Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 18
+#           cache: 'npm'  # 使用 npm 缓存
 
-      - name: 📦 Install dependencies
-        run: npm install  # 使用 npm 安装依赖
+#       - name: 📦 Install dependencies
+#         run: npm install  # 使用 npm 安装依赖
 
-      - name: 🔧 Build Mist.js
-        run: npm run build  # 使用 npm 构建项目
+#       - name: 🔧 Build Mist.js
+#         run: npm run build  # 使用 npm 构建项目
 
-      - name: 📁 Zip dist/ folder
-        run: zip -r mistjs.zip dist  # 将 dist 目录压缩为 zip
+#       - name: 📁 Zip dist/ folder
+#         run: zip -r mistjs.zip dist  # 将 dist 目录压缩为 zip
 
-      - name: 🚀 Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          name: Release ${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
-          body: |
-            🚀 自动发布版本：${{ github.ref_name }}
+#       - name: 🚀 Create GitHub Release
+#         uses: softprops/action-gh-release@v1
+#         with:
+#           name: Release ${{ github.ref_name }}
+#           tag_name: ${{ github.ref_name }}
+#           body: |
+#             🚀 自动发布版本：${{ github.ref_name }}
             
-            包含构建产物：
-            - `dist/` 编译文件
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#             包含构建产物：
+#             - `dist/` 编译文件
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 📎 Upload artifact
-        uses: softprops/action-gh-release@v1
-        with:
-          files: mistjs.zip  # 上传 zip 文件作为发布附件
-        env:
-          GITHUB_TOKEN: ${{ secrets.GB_TOKEN }}
+#       - name: 📎 Upload artifact
+#         uses: softprops/action-gh-release@v1
+#         with:
+#           files: mistjs.zip  # 上传 zip 文件作为发布附件
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GB_TOKEN }}
