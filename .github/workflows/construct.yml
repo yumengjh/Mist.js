@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'  # 只在打标签（如 v1.0.0）时触发
+  workflow_dispatch:  # 允许手动触发工作流
 
 jobs:
   release:
