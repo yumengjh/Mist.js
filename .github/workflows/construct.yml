@@ -1,0 +1,49 @@
+name: Release Mist.js
+
+on:
+  push:
+    tags:
+      - 'v*'  # 只在打标签（如 v1.0.0）时触发
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'  # 改为 'pnpm' 如果你用的是 pnpm
+
+      - name: 📦 Install dependencies
+        run: npm install
+
+      - name: 🔧 Build Mist.js
+        run: npm run build
+
+      - name: 📁 Zip dist/ folder
+        run: zip -r mistjs.zip dist
+
+      - name: 🚀 Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          body: |
+            🚀 自动发布版本：${{ github.ref_name }}
+            
+            包含构建产物：
+            - `dist/` 编译文件
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 📎 Upload artifact
+        uses: softprops/action-gh-release@v1
+        with:
+          files: mistjs.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
