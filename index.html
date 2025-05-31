@@ -1,34 +1,154 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Mist.js 演示</title>
   <style>
     [v-cloak] {
       display: none;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    }
+
+    .container {
+      position: relative;
+      text-align: center;
+      padding: 2rem 3rem;
+      border-radius: 1rem;
+      z-index: 1;
+    }
+
+    .bg-blur {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 620px;
+      height: 620px;
+      transform: translate(-50%, -55%);
+      z-index: 0;
+      background: radial-gradient(circle at 30% 30%, #8fdfff 0%, #a084ee 60%, #f8cfff 100%);
+      filter: blur(60px);
+      opacity: 0.85;
+      pointer-events: none;
+      border-radius: 50%;
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+      position: relative;
+      font-weight: 600;
+      z-index: 1;
+    }
+
+    .counter {
+      font-size: 4rem;
+      color: #181818;
+      margin: 1rem 0;
+      font-weight: bold;
+      position: relative;
+      z-index: 1;
+      font-weight: 400;
+    }
+
+    .description {
+      color: #1f1f1f;
+      margin-top: 2rem;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+
+    button {
+      color: #fff;
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+      border: none;
+      border-radius: 8px;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .lang-toggle {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      z-index: 10;
+      background: #fff;
+      color: #6e8efb;
+      border: 2px solid #768bf8;
+      border-radius: 6px;
+      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(160, 132, 238, 0.08);
+      transition: all 0.2s, color 0.2s;
     }
   </style>
 </head>
 
 <body>
+  <!-- 左上角切换按钮 -->
+  <button class="lang-toggle" @click="toggleLang">
+    {{ language === 'zh-CN' ? 'English' : '中文' }}
+  </button>
   <div id="app" v-cloak>
-    <h1>{{ name }}</h1>
-
+    <div class="container">
+      <div class="bg-blur"></div>
+      <h1 v-if="language === 'zh-CN'">你好，我是Mist.js</h1>
+      <h1 v-else>Hello, I am Mist.js</h1>
+      <div class="counter">{{ count }}</div>
+      <button @click="increment">{{ language === 'zh-CN' ? '增加' : 'Increase' }}</button>
+      <div class="description" v-if="language === 'zh-CN'">
+        Mist.js 是一个轻量级的渐进式框架，<br>
+        专为增强现有 HTML 页面而设计。
+      </div>
+      <div class="description" v-else>
+        Mist.js is a lightweight, progressive framework,<br>
+        designed to enhance existing HTML pages.
+      </div>
+    </div>
   </div>
   <script type="module">
-    // import { createApp } from './src/index.ts'
     import { createApp } from './dist/mist.es.js'
     const app = createApp({
-      name: 'hello'
-
-
-
-
-
+      count: 0,
+      language: 'en-US',
+      increment() {
+        this.count++
+      },
+      toggleLang() {
+        this.language = this.language === 'zh-CN' ? 'en-US' : 'zh-CN'
+      }
     })
-    app.mount('#app')
+    app.mount('body')
   </script>
 </body>
 
