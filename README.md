@@ -4,7 +4,8 @@
 
 - 仅约 17kb，gzip 后约 7kb
 - 基于 DOM，原地修改
-- 由 `@vue/reactivity` 驱动
+- 无需构建，直接使用
+- 支持 TypeScript
 
 ## 构建说明
 

@@ -1,43 +1,35 @@
-<h2>Examples</h2>
-<ul>
-  <li><a href="/examples/todomvc.html">TodoMVC</a></li>
-  <li><a href="/examples/commits.html">Commits</a></li>
-  <li><a href="/examples/grid.html">Grid</a></li>
-  <li><a href="/examples/markdown.html">Markdown</a></li>
-  <li><a href="/examples/svg.html">SVG</a></li>
-  <li><a href="/examples/tree.html">Tree</a></li>
-</ul>
+<!DOCTYPE html>
+<html lang="en">
 
-<h2>Tests</h2>
-<ul>
-  <li><a href="/tests/scope.html">v-scope</a></li>
-  <li><a href="/tests/effect.html">v-effect</a></li>
-  <li><a href="/tests/bind.html">v-bind</a></li>
-  <li><a href="/tests/on.html">v-on</a></li>
-  <li><a href="/tests/if.html">v-if</a></li>
-  <li><a href="/tests/show.html">v-show</a></li>
-  <li><a href="/tests/for.html">v-for</a></li>
-  <li><a href="/tests/model.html">v-model</a></li>
-  <li><a href="/tests/once.html">v-once</a></li>
-  <li><a href="/tests/html.html">v-html</a></li>
-  <li><a href="/tests/text.html">v-text</a></li>
-  <li><a href="/tests/pre.html">v-pre</a></li>
-  <li><a href="/tests/cloak.html">v-cloak</a></li>
-  <li><a href="/tests/reactive.html">reactive</a></li>
-  <li><a href="/tests/multi-mount.html">Multi mount</a></li>
-  <li><a href="/tests/custom-delimiters.html">Custom delimiters</a></li>
-</ul>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+  </style>
+</head>
 
-<h2>Demo</h2>
-<ul>
-  <li><a href="/demo/demo.html">Demo</a></li>
-  <li><a href="/demo/navigo.html">Navigo</a></li>
-  <li><a href="/demo/window.html">window</a></li>
-  <li><a href="/demo/round.html">Round</a></li>
-</ul>
+<body>
+  <div id="app" v-cloak>
+    <h1>{{ name }}</h1>
 
-<style>
-  a {
-    font-size: 18px;
-  }
-</style>
+  </div>
+  <script type="module">
+    // import { createApp } from './src/index.ts'
+    import { createApp } from './dist/mist.es.js'
+    const app = createApp({
+      name: 'hello'
+
+
+
+
+
+    })
+    app.mount('#app')
+  </script>
+</body>
+
+</html>
