@@ -17,16 +17,16 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'pnpm'  # 改为 'pnpm' 如果你用的是 pnpm
+          cache: 'pnpm'  # 使用 pnpm 缓存
 
       - name: 📦 Install dependencies
-        run: npm install
+        run: pnpm install  # 使用 pnpm 安装依赖
 
       - name: 🔧 Build Mist.js
-        run: npm run build
+        run: pnpm run build  # 使用 pnpm 构建项目
 
       - name: 📁 Zip dist/ folder
-        run: zip -r mistjs.zip dist
+        run: zip -r mistjs.zip dist  # 将 dist 目录压缩为 zip
 
       - name: 🚀 Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -44,6 +44,6 @@ jobs:
       - name: 📎 Upload artifact
         uses: softprops/action-gh-release@v1
         with:
-          files: mistjs.zip
+          files: mistjs.zip  # 上传 zip 文件作为发布附件
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
