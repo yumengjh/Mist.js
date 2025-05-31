@@ -47,4 +47,4 @@ jobs:
         with:
           files: mistjs.zip  # 上传 zip 文件作为发布附件
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GB_TOKEN }}
