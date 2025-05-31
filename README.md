@@ -21,6 +21,17 @@
 - `skipLibCheck`: 跳过对 node_modules 中类型定义的严格检查，避免第三方库的类型定义问题影响项目构建
 - `esModuleInterop`: 改善模块兼容性，使 TypeScript 能够正确处理 CommonJS 和 ES Module 之间的互操作性
 
+## 快速上手
+
+```html
+
+<div v-scope="{ count: 0 }">
+  <p>{{ count }}</p>
+  <button @click="count++">+1</button>
+</div>
+<script src="mist.js" defer init></script>
+
+```
 
 ##  使用方法
 
@@ -64,6 +75,8 @@ Mist.reactive()
 
 该函数接受一个数据对象作为参数，该数据对象中的数据将作为所有表达式的根作用域。
 
+**可以创建多个应用实例，每个应用实例可以有不同的作用域。**
+
 ```html
 <script type="module">
     import { createApp } from '/path/to/mist.js'
@@ -81,6 +94,7 @@ Mist.reactive()
 
 注意：如果不传入任何参数，`Mist.js` 会处理整个页面，但是这会带来性能问题，因为将被迫遍历整个页面的 DOM，所以请谨慎使用。
 
+
 ### 生命周期
 
 你可以监听每个元素的特殊 vue:mounted 和 vue:unmounted 生命周期事件，来执行一些自定义操作。
@@ -92,6 +106,7 @@ Mist.reactive()
   @vue:unmounted="console.log('unmounted: ', $el)"
 ></div>
 ```
+
 ### v-effect
 
 使用 v-effect 执行响应式内联语句：
@@ -333,45 +348,446 @@ createApp({
 </div>
 ```
 
+### ref
+
+`ref` 指令用于在元素上创建一个引用，可以通过 `ref` 获取元素的引用，用于在内联语句中使用，支持动态 ref。
+
+```html
+ <div id="app">
+       <div id="root" :ref="dynamicRef">
+        <button @click="console.log($refs.root.style.backgroundColor='red')">背景颜色Red</button>
+        <div>通过ref获取ID -> {{ $refs.root.id }}</div>  <!-- 会报错，但是功能正常 -->
+        <button @click="dynamicRef = 'a2'">动态切换Ref</button>
+       </div>
+    </div>
+    <script type="module">
+        Mist.createApp({
+            dynamicRef:'root' //动态引用
+        }).mount('#app')
+    </script>
+```
+
 
 ### v-bind
 
-包括 : 简写和 class/style 特殊处理
+包括: 简写和 class/style 特殊处理...
+
+```html
+<div v-scope="{ show: true, color: 'red', fontSize: '16px',id: '123'}">
+  <div v-bind:id="id">
+    动态id:{{ id }}
+  </div>
+  <div :class="{'active': true}">
+    动态class
+  </div>
+  <div v-bind:class="show ? 'active' : 'inactive'">
+    {{ show ? '显示' : '隐藏' }}
+    动态判断class
+  </div>
+  <div :class= ['foo', { red: true }]>
+    静态class与动态class合并
+  </div>
+  <div v-bind:style="{ color: color, fontSize: fontSize }">
+    style动态样式绑定
+  </div>
+</div>
+```
+
+### component
+
+当其依赖的响应式数据发生变化时，计算属性会自动重新计算，并更新 DOM。
+
+```html
+<script type="module">
+  import { createApp } from '/path/to/mist.js'
+
+  function MyComp() {
+    return {
+      $template: '#comp',
+      count: 0,
+      get plusOne() {
+        return this.count + 1
+      }
+    }
+  }
+
+  createApp({
+    MyComp
+  }).mount()
+</script>
+
+<template id="comp">
+  {{ count }} {{ plusOne }}
+  <button @click="count++">++</button>
+</template>
+
+<div v-scope="MyComp()"></div>
+```
+
+### v-scope
+
+`v-scope` 指令用于在元素上创建一个**块级作用域**，可以用于创建局部作用域，也可以用于创建全局作用域。它的用法和`createApp`的参数用法一致。
+
+```html
+<div v-scope="{ count: 0 }">
+  <button @click="count++">增加</button>
+</div>
+```
+
+当块级作用域形成嵌套时，内层作用域会覆盖外层作用域，如果需要的数据在内层作用域不存在，会自动从外层（父）作用域中获取。
+**如果还没有则从根作用域（createApp）中获取。**
+
+```html
+<div v-scope="{ a:1}">
+    <div v-scope="{ a:2}">
+        <div v-scope="{ a:3}">
+            {{a}}
+        </div>
+    </div>
+</div>
+```
 
 ### v-on
 
 包括 @ 简写和所有修饰符
 
+```html
+<div v-scope="{ count: 0 }">
+  <button @click.prevent="count++">增加</button>  <!-- 阻止默认行为 -->
+  <button v-on:click.once="count++">增加</button> <!-- 只触发一次 -->
+  <div>{{ count }}</div>
+  <button type="submit" @click.prevent.stop>提交</button>  <!-- 阻止默认行为，阻止事件冒泡 -->
+   <input
+    type="text"
+    @keyup.x="alert('触发')"
+    placeholder="在输入框输入x会触发alert"
+  />
+</div>
+```
+v-on 支持以下修饰符：
+
+- `.stop` - 调用 event.stopPropagation()，阻止事件冒泡
+- `.prevent` - 调用 event.preventDefault() ，阻止默认行为
+- `.self` - 只当事件是从监听器绑定的元素本身触发时才触发回调
+- `.ctrl` - 按住 Ctrl 键时触发
+- `.shift` - 按住 Shift 键时触发
+- `.alt` - 按住 Alt 键时触发
+- `.meta` - 按住 Meta 键时触发
+- `.left` - 鼠标左键点击时触发
+- `.middle` - 鼠标中键点击时触发
+- `.right` - 鼠标右键点击时触发
+- `.exact` - 精确匹配修饰符组合
+- `.once` - 只触发一次回调
+**...**
+
 ### v-model
 
-所有输入类型 + 非字符串 :value 绑定
+`v-model` 指令用于在表单输入元素上创建双向数据绑定。它会根据控件类型自动选取正确的方法来更新元素。
+
+#### 1. 文本输入框 (Text Input)
+```html
+<div v-scope="{ text: 'hello' }">
+  <input v-model.trim="text" />
+  <p>{{ text }}</p>
+</div>
+```
+- 使用 `v-model` 绑定文本输入框的值
+- `.trim` 修饰符可以自动去除输入的首尾空格
+- 输入框的值会实时同步到 `text` 变量
+
+#### 2. 文本域 (Textarea)
+```html
+<div v-scope="{ text: 'hello' }">
+  <textarea v-model.trim="text"></textarea>
+  <p>{{ text }}</p>
+</div>
+```
+- 文本域的使用方式与文本输入框相同
+- 同样支持 `.trim` 修饰符
+- 多行文本输入会自动同步到绑定的变量
+
+#### 3. 复选框 (Checkbox)
+```html
+<div v-scope="{ checked: true }">
+  <input type="checkbox" id="checkbox" v-model="checked" />
+  <label for="checkbox">{{ checked }}</label>
+</div>
+```
+- 单个复选框绑定到布尔值
+- 复选框的选中状态会同步到 `checked` 变量
+- 可以直接显示布尔值状态
+
+#### 4. 复选框组 (Checkbox with Array)
+```html
+<div v-scope="{ arr: ['one'] }">
+  <label>
+    <input type="checkbox" v-model="arr" value="one" /> one
+  </label>
+  <label>
+    <input type="checkbox" v-model="arr" value="two" /> two
+  </label>
+  <label>
+    <input type="checkbox" v-model="arr" :value="123" /> actual number
+  </label>
+  <div>{{ arr }}</div>
+</div>
+```
+- 多个复选框可以绑定到同一个数组
+- 选中时会将 `value` 添加到数组
+- 取消选中时会从数组中移除
+- 支持动态值绑定（使用 `:value`）
+
+#### 5. 自定义值的复选框 (Checkbox with true-value/false-value)
+```html
+<div v-scope="{ 
+  checkToggle: { a: 1 },
+  trueValue: { a: 2 },
+  falseValue: { a: 3 }
+}">
+  <input
+    type="checkbox"
+    v-model="checkToggle"
+    :true-value="trueValue"
+    :false-value="falseValue"
+  />
+  <div>{{ checkToggle }}</div>
+</div>
+```
+- 可以自定义复选框选中和未选中时的值
+- 使用 `:true-value` 和 `:false-value` 绑定
+- 支持复杂对象作为值
+
+#### 6. 单选框 (Radio)
+```html
+<div v-scope="{ radioSelected: 'two' }">
+  <label>
+    <input type="radio" v-model="radioSelected" value="one" /> one
+  </label>
+  <label>
+    <input type="radio" v-model="radioSelected" value="two" /> two
+  </label>
+  <label>
+    <input type="radio" v-model="radioSelected" value="three" /> three
+  </label>
+  <div>{{ radioSelected }}</div>
+</div>
+```
+- 多个单选框绑定到同一个变量
+- 选中时会将该单选框的 `value` 赋值给变量
+- 支持任意类型的值
+
+#### 7. 选择框 (Select)
+```html
+<div v-scope="{ selected: 'two' }">
+  <select v-model="selected">
+    <option>one</option>
+    <option>two</option>
+    <option>three</option>
+  </select>
+  <div>{{ selected }}</div>
+</div>
+```
+- 下拉选择框绑定到变量
+- 选中选项的值会同步到变量
+- 支持事件监听（如 `@change`）
+
+#### 修饰符
+- `.trim` - 自动去除输入的首尾空格
+- `.number` - 自动将输入转换为数字
+- `.lazy` - 在 change 事件后同步（而不是 input 事件）
+
+#### 调试技巧
+可以使用 `$data` 来查看当前作用域的所有响应式数据：
+```html
+<div v-scope="{ text: 'hello', checked: true }">
+  <pre>{{ $data }}</pre>
+  <!-- 输出: { text: 'hello', checked: true } -->
+</div>
+```
 
 ### v-if / v-else / v-else-if
 
+```html
+<script type="module">
+  import { createApp } from '/path/to/mist.js'
+
+  createApp().mount('#app')
+</script>
+
+<div id="app" v-scope="{ open: true, elseOpen: true }">
+  <button @click="open = !open">toggle</button>
+  <button @click="elseOpen = !elseOpen">toggle else</button>
+  <div v-if="open">ok</div>
+  <div v-else-if="elseOpen">else if</div>
+  <template v-else>else</template>
+</div>
+```
+
 ### v-for
+
+```html
+<script type="module">
+  import { createApp } from '/path/to/mist.js'
+
+  let id = 4
+  createApp({
+    list: [
+      { id: 1, text: 'bar' },
+      { id: 2, text: 'boo' },
+      { id: 3, text: 'baz' },
+      { id: 4, text: 'bazz' }
+    ],
+    add() {
+      this.list.push({ id: ++id, text: 'new item' })
+    },
+    splice() {
+      this.list.splice(1, 0, { id: ++id, text: 'new item' })
+    }
+  }).mount('#app')
+</script>
+
+<div id="app">
+  <button @click="add">add</button>
+  <button @click="list.reverse()">reverse</button>
+  <button @click="list.pop()">pop</button>
+  <button @click="splice">splice</button>
+  <ul>
+    <li v-for="({ id, text }, index) in list" :key="id">
+      <div>{{ index }} {{ { id, text } }}</div>
+    </li>
+  </ul>
+
+  <ul>
+    <li v-for="item of list" :key="item.id">
+      <input v-model="item.text" />
+    </li>
+  </ul>
+</div>
+```
 
 ### v-show
 
+```html
+<div v-scope="{ show: true }">
+  <div v-show="show">显示</div>
+  <div v-show="!show">隐藏</div>
+</div>
+```
+
 ### v-html
+
+```html
+<div v-scope="{ html: '<p>HTML内容</p>' }">
+  <div v-html="html"></div>
+</div>
+```
 
 ### v-text
 
+```html
+<div v-scope="{ text: '文本内容' }">
+  <div v-text="text"></div>
+</div>
+```
+
 ### v-pre
+
+`v-pre`标记的区域不会被解析，会原样输出。
+
+```html
+<div v-scope="{ text: '文本内容' }">
+  <div v-pre>{{ text }}</div>   <!-- 不会被解析 -->
+</div>
+```
 
 ### v-once
 
+`v-once`标记的区域只渲染一次，不会随着数据的变化而变化。
+
+```html
+<div v-scope="{ text: '文本内容' }">
+  <div v-once>{{ text }}</div>   <!-- 只渲染一次 -->
+</div>
+```
+
 ### v-cloak
+
+`v-cloak`主要用于防止闪烁，即从模板编译（{{ name }}）到渲染完成（ 名字 ）之间，需要在css中添加样式。
+
+```html
+<script type="module">
+  import { createApp } from '/path/to/mist.js'
+  createApp({
+    msg: 'content',
+    hide: false
+  }).mount()
+</script>
+
+<div v-scope v-cloak>
+  <button @click="hide = !hide">切换</button>
+  <div v-cloak v-if="!hide">{{ msg }}</div>
+</div>
+
+<style>
+  [v-cloak] {
+    display: none;
+  }
+</style>
+```
 
 ### reactive()
 
+在`Mist.js`主要用于创建全局状态，它与应用作用域共存。
+
+```html
+<script type="module">
+  import { createApp, reactive } from '../src'
+
+  const store = reactive({
+    count: 0,
+    inc() {
+      this.count++
+    }
+  })
+
+  // 在全局作用域中操作 store
+  store.inc()
+
+  createApp({
+    // 在应用作用域中共享 store
+    store
+  }).mount()
+</script>
+
+<div v-scope="{ localCount: 0 }">
+  <p>全局 {{ store.count }}</p>
+  <button @click="store.inc">增加</button>
+
+  <p>局部 {{ localCount }}</p>
+  <button @click="localCount++">增加</button>
+</div>
+```
+
+
 ### nextTick()
 
+`nextTick` 用于将回调延迟到下一个 DOM 更新周期之后执行。
 
-### 表达式
+
+### 内联表达式
 
 #### $el
 
 `$el` 指向指令绑定的当前元素
+
+#### $refs
+
+`$refs` 指向指令绑定的元素的引用
+
+#### $data
+
+`$data` 指向指令绑定的数据对象
+
 
 ## 安全性和 CSP
 
