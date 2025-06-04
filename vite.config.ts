@@ -5,10 +5,11 @@ import viteCompression from 'vite-plugin-compression'
 export default defineConfig({
   esbuild: {
     minify: true,
-    // sourcemap:true
+    sourcemap:true
   },
   build: {
     target: 'esnext',
+    sourcemap:true,
     minify: 'terser',
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
