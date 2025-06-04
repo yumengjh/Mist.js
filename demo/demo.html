@@ -1,14 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <!-- <script src="../dist/mist.iife.js" defer init></script> -->
+    <!-- <script src="../dist/mist.iife.js" defer></script> -->
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+        #app {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            min-height: 90vh;
+        }
+    </style>
 </head>
+
 <body>
-   <script type="module">
-      
-   </script>
+    <div id="app" v-cloak>
+        <h1>{{ count }}</h1>
+        <button @click="count++">Increment</button>
+    </div>
+    <script type="module">
+        import { createApp } from '../src'
+        const app = createApp({
+            count: 0
+        })
+        app.mount('#app')
+    </script>
 </body>
+
 </html>

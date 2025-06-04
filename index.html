@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mist.js</title>
+  <script src="./dist/mist.iife.js" defer></script>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' x='-10px' font-size='90'>🐟</text></svg>">
   <style>
     [v-cloak] {
@@ -138,8 +139,7 @@
     </div>
   </div>
   <script type="module">
-    import { createApp } from './dist/mist.es.js'
-    const app = createApp({
+    const app = Mist.createApp({
       count: 0,
       language: 'en-US',
       increment() {

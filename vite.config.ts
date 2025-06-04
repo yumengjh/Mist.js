@@ -4,7 +4,8 @@ import viteCompression from 'vite-plugin-compression'
 
 export default defineConfig({
   esbuild: {
-    minify: true
+    minify: true,
+    // sourcemap:true
   },
   build: {
     target: 'esnext',
@@ -28,6 +29,9 @@ export default defineConfig({
         }
       ]
     }
+  },
+  server: {
+    open: '/demo/demo.html'
   },
   // plugins: [
   //   viteCompression({

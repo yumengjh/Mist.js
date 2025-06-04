@@ -73,9 +73,9 @@ export const createApp = (initialData?: any) => {
         roots[0] === document.documentElement
       ) {
         console.warn(
-          `挂载在 documentElement 上 - 这不是最优的，因为 petite-vue ` +
+          `挂载在 documentElement 上 - 这不是最优的，因为 Mist.js ` +
             `将被迫遍历整个页面的 DOM。` +
-            `考虑使用 \`v-scope\` 明确标记由 petite-vue 控制的元素。`
+            `考虑使用 \`v-scope\` 明确标记由 Mist.js 控制的元素。`
         )
       }
 

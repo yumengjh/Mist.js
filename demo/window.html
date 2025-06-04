@@ -1,79 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document Picture-in-Picture API 示例</title>
-    <style>
-        #pipContent {
-            width: 600px;
-            height: 300px;
-            background: pink;
-            font-size: 20px;
-        }
-    </style>
+    <title>Document</title>
+    <script src="../dist/mist.iife.js" defer></script>
 </head>
+
 <body>
-    <div id="container">
-        <div id="pipContent">这是一个将要放入画中画的 div 元素！</div>
-        <button id="clickBtn">切换画中画</button>
+    <div v-scope="{
+    count: 0,
+    }">
+        <h1>{{ count }}</h1>
+    <h2>{{  }}</h2>
     </div>
+    <script type="module">
+        Mist.createApp({
 
-    <script>
-        // 检查是否支持 PiP 功能
-        if ('documentPictureInPicture' in window) {
-            console.log("🚀 浏览器支持 PiP 功能！");
-        } else {
-            console.warn("⚠️ 当前浏览器不支持 PiP 功能，更新浏览器或者换台电脑吧！");
-        }
-
-        // 请求 PiP 窗口
-        document.getElementById("clickBtn").addEventListener("click", async function () {
-            const pipContent = document.getElementById("pipContent");
-
-            // 请求创建一个 PiP 窗口
-            const pipWindow = await window.documentPictureInPicture.requestWindow({
-                width: 200,  // 设置窗口的宽度
-                height: 300  // 设置窗口的高度
-            });
-
-            // 将原始元素克隆并添加到 PiP 窗口中
-            pipWindow.document.body.appendChild(pipContent.cloneNode(true));
-
-            // 设置 PiP 样式同步
-            [...document.styleSheets].forEach((styleSheet) => {
-                try {
-                    const cssRules = [...styleSheet.cssRules].map((rule) => rule.cssText).join('');
-                    const style = document.createElement('style');
-                    style.textContent = cssRules;
-                    pipWindow.document.head.appendChild(style);
-                } catch (e) {
-                    const link = document.createElement('link');
-                    link.rel = 'stylesheet';
-                    link.type = styleSheet.type;
-                    link.media = styleSheet.media;
-                    link.href = styleSheet.href ?? '';
-                    pipWindow.document.head.appendChild(link);
-                }
-            });
-
-            // 监听进入和退出 PiP 模式的事件
-            pipWindow.addEventListener("pagehide", (event) => {
-                console.log("已退出 PIP 窗口");
-            });
-
-            pipWindow.addEventListener('focus', () => {
-                console.log("PiP 窗口进入了焦点状态");
-            });
-
-            pipWindow.addEventListener('blur', () => {
-                console.log("PiP 窗口失去了焦点");
-            });
-        });
-
-        // 关闭 PiP 窗口
-        // pipWindow.close();  // 可以手动调用关闭窗口
+        }).mount()
     </script>
 </body>
-</html>
 
+</html>
