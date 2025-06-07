@@ -108,6 +108,11 @@ export const walk = (node: Node, ctx: Context): ChildNode | null | void => {
 const walkChildren = (node: Element | DocumentFragment, ctx: Context) => {
   let child = node.firstChild
   while (child) {
+    // 如果是换行节点则跳过
+    if (child.nodeType === Node.TEXT_NODE && /^\s*[\r\n]+\s*$/.test(child.nodeValue || '')) {
+      child = child.nextSibling
+      continue
+    }
     child = walk(child, ctx) || child.nextSibling
   }
 }
@@ -124,7 +129,7 @@ const processDirective = (
 
   // 修饰符
   raw = raw.replace(modifierRE, (_, m) => {
-    ;(modifiers || (modifiers = {}))[m] = true
+    ; (modifiers || (modifiers = {}))[m] = true
     return ''
   })
 

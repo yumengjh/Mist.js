@@ -118,8 +118,8 @@ export const _for = (el: Element, exp: string, ctx: Context) => {
 
   ctx.effect(() => {
     const source = evaluate(ctx.scope, sourceExp)
-    const prevKeyToIndexMap = keyToIndexMap
-    ;[childCtxs, keyToIndexMap] = createChildContexts(source)
+    const prevKeyToIndexMap = keyToIndexMap;
+    [childCtxs, keyToIndexMap] = createChildContexts(source)
     if (!mounted) {
       blocks = childCtxs.map((s) => mountBlock(s, anchor))
       mounted = true

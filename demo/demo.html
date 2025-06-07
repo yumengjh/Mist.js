@@ -4,12 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Mist-Demo</title>
     <!-- <script src="../dist/mist.iife.js" defer></script> -->
     <style>
-        [v-cloak] {
-            display: none;
+        :root {
+            --md-outlined-button-container-shape: 3px;
+            /* --md-filled-button-container-shape: 3px; */
         }
+
+        md-outlined-button {
+            /* --md-sys-color-primary: rgb(25, 161, 86); */
+        }
+
+
         #app {
             display: flex;
             flex-direction: column;
@@ -19,18 +26,89 @@
             font-family: Arial, sans-serif;
             min-height: 90vh;
         }
+
+        h1 {
+            font-weight: 500;
+        }
+
+        [v-cloak] {
+            opacity: 0;
+        }
+
+        .btn-item {
+            display: flex;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1000;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .page {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(60, 64, 67, 0.08), 0 1.5px 4px rgba(60, 64, 67, 0.06);
+            margin-bottom: 1.5rem;
+            border: none;
+            transition: box-shadow 0.2s;
+            user-select: none;
+        }
+
+        .page:hover {
+            box-shadow: 0 4px 16px rgba(60, 64, 67, 0.12), 0 3px 8px rgba(60, 64, 67, 0.10);
+        }
     </style>
 </head>
 
 <body>
     <div id="app" v-cloak>
-        <h1>{{ count }}</h1>
-        <button @click="count++">Increment</button>
+        <div class="btn-item">
+            <md-outlined-button @click="add">增加</md-outlined-button>
+        </div>
+        <div class="view">
+            <div class="page" v-for="({name,value},index) in items" :key="index">
+                <p>${ name }- ${ value }</p>
+                <md-filled-button @click="remove(index)" ref="del_btn">删除</md-filled-button>
+                <md-filled-button @click="console.log($el)">El</md-filled-button>
+            </div>
+        </div>
     </div>
     <script type="module">
-        import { createApp } from '../src'
+        import '@material/web/button/filled-button.js';
+        import '@material/web/button/outlined-button.js';
+        import '@material/web/button/elevated-button.js';
+        import { createApp } from '../src/index';
         const app = createApp({
-            count: 0
+            $delimiters: ['${', '}'],
+            items: [
+                {
+                    name: 'item1',
+                    value: 1
+                },
+                {
+                    name: 'item2',
+                    value: 2
+                },
+                {
+                    name: 'item3',
+                    value: 3
+                }
+            ],
+            add() {
+                this.items.push({
+                    name: `item${this.items.length + 1}`,
+                    value: this.items.length + 1
+                });
+            },
+            remove(index) {
+                console.log(this);
+                this.items[index].value = '删除中...';
+                setTimeout(() => {
+                    this.items.splice(index, 1);
+                }, 100);
+            }
         })
         app.mount('#app')
     </script>

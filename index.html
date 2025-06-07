@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mist.js</title>
   <script src="./dist/mist.iife.js" defer></script>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' x='-10px' font-size='90'>🐟</text></svg>">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' x='-10px' font-size='90'>🐟</text></svg>">
   <style>
     [v-cloak] {
       display: none;
@@ -113,10 +114,14 @@
       box-shadow: 0 2px 8px rgba(160, 132, 238, 0.08);
       transition: all 0.2s, color 0.2s;
     }
+
+    [v-cloak] {
+      display: none;
+    }
   </style>
 </head>
 
-<body>
+<body v-cloak>
   <!-- 左上角切换按钮 -->
   <button class="lang-toggle" @click="toggleLang">
     {{ language === 'zh-CN' ? 'English' : '中文' }}
