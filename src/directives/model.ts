@@ -66,10 +66,10 @@ export const model: Directive<
     effect(() => {
       const value = get()
       if (isArray(value)) {
-        ;(el as HTMLInputElement).checked =
+        (el as HTMLInputElement).checked =
           looseIndexOf(value, getValue(el)) > -1
       } else if (value !== oldValue) {
-        ;(el as HTMLInputElement).checked = looseEqual(
+        (el as HTMLInputElement).checked = looseEqual(
           value,
           getCheckboxValue(el as HTMLInputElement, true)
         )
@@ -84,7 +84,7 @@ export const model: Directive<
     effect(() => {
       const value = get()
       if (value !== oldValue) {
-        ;(el as HTMLInputElement).checked = looseEqual(value, getValue(el))
+        (el as HTMLInputElement).checked = looseEqual(value, getValue(el))
       }
     })
   } else {
@@ -95,6 +95,10 @@ export const model: Directive<
       return val
     }
 
+    /*
+    compositionstart：输入法（如拼音、日文输入法）开始输入时触发。
+    compositionend：输入结束时触发。
+    */
     listen(el, 'compositionstart', onCompositionStart)
     listen(el, 'compositionend', onCompositionEnd)
     listen(el, modifiers?.lazy ? 'change' : 'input', () => {
@@ -135,7 +139,7 @@ const getCheckboxValue = (
 }
 
 const onCompositionStart = (e: Event) => {
-  ;(e.target as any).composing = true
+  (e.target as any).composing = true
 }
 
 const onCompositionEnd = (e: Event) => {
@@ -147,7 +151,5 @@ const onCompositionEnd = (e: Event) => {
 }
 
 const trigger = (el: HTMLElement, type: string) => {
-  const e = document.createEvent('HTMLEvents')
-  e.initEvent(type, true, true)
-  el.dispatchEvent(e)
+  el.dispatchEvent(new Event(type, { bubbles: true, cancelable: true }))
 }

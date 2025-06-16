@@ -40,7 +40,7 @@
       transform: translate(-50%, -55%);
       z-index: 0;
       background: radial-gradient(circle at 30% 30%, #8fdfff 0%, #a084ee 60%, #f8cfff 100%);
-      filter: blur(60px);
+      filter: blur(300px);
       opacity: 0.85;
       pointer-events: none;
       border-radius: 50%;
@@ -75,8 +75,8 @@
     }
 
     button {
-      color: #fff;
-      background: linear-gradient(135deg, #6e8efb, #a777e3);
+      color: #1f1f1f;
+      /* background: linear-gradient(135deg, #6e8efb, #a777e3); */
       border: none;
       border-radius: 8px;
       padding: 0.8rem 1.5rem;
@@ -104,8 +104,8 @@
       left: 24px;
       z-index: 10;
       background: #fff;
-      color: #6e8efb;
-      border: 2px solid #768bf8;
+      color: #383838;
+      border: 2px solid #383838;
       border-radius: 6px;
       padding: 0.5rem 1.2rem;
       font-size: 1rem;
@@ -118,19 +118,31 @@
     [v-cloak] {
       display: none;
     }
+
+    .code {
+      font-weight: bold;
+      color: #6e8efb;
+      background-color: #edeef1;
+      padding: 5px 10px;
+      border-radius: 20px;
+    }
+
+    .chinese-text {
+      margin-left: 10px;
+    }
   </style>
 </head>
 
 <body v-cloak>
-  <!-- 左上角切换按钮 -->
   <button class="lang-toggle" @click="toggleLang">
     {{ language === 'zh-CN' ? 'English' : '中文' }}
   </button>
   <div id="app" v-cloak>
     <div class="container">
       <div class="bg-blur"></div>
-      <h1 v-if="language === 'zh-CN'">你好，我是Mist.js</h1>
-      <h1 v-else>Hello, I am Mist.js</h1>
+      <h1 v-if="language === 'zh-CN'">你好，我是<span class="code"
+          :class="{ 'chinese-text': language === 'zh-CN' }">Mist.js</span></h1>
+      <h1 v-else>Hello, I am <span class="code">Mist.js</span></h1>
       <div class="counter">{{ count }}</div>
       <button @click="increment">{{ language === 'zh-CN' ? '增加' : 'Increase' }}</button>
       <div class="description" v-if="language === 'zh-CN'">

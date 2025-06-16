@@ -32,7 +32,7 @@ const modifierGuards: Record<
 export const on: Directive = ({ el, get, exp, arg, modifiers }) => {
   if (!arg) {
     if (import.meta.env.DEV) {
-      console.error(`petite-vue 不支持 v-on="obj" 语法。`)
+      console.error(`Mist.js 不支持 v-on="obj" 语法。`)
     }
     return
   }

@@ -63,6 +63,7 @@ export const walk = (node: Node, ctx: Context): ChildNode | null | void => {
     // 其他指令
     const deferred: [string, string][] = []
     for (const { name, value } of [...el.attributes]) {
+      // 为什么这里还要判断非v-cloak，在前面不是移除了吗？
       if (dirRE.test(name) && name !== 'v-cloak') {
         if (name === 'v-model') {
           // 延迟处理 v-model，因为它依赖于 :value 绑定先被处理
