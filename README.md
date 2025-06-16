@@ -7,6 +7,11 @@
 - 无需构建，直接使用
 - 支持 TypeScript
 
+CDN：
+- IIFE : https://cdn.jsdelivr.net/gh/yumengjh/Mist.js@v1.0.3/dist/mist.iife.js
+- ES Module : https://cdn.jsdelivr.net/gh/yumengjh/Mist.js@v1.0.3/dist/mist.es.js
+- UMD : https://cdn.jsdelivr.net/gh/yumengjh/Mist.js@v1.0.3/dist/mist.umd.js
+
 ## 构建说明
 
 如果遇到 TypeScript 类型错误，可以在 `tsconfig.json` 中添加以下配置：
