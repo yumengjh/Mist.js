@@ -3,3 +3,4 @@ node_modules
 /dist/src
 server/
 use.md
+/dist/types
