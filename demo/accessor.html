@@ -4,37 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        :root {
-            --md-outlined-button-container-shape: 3px;
-            /* --md-filled-button-container-shape: 3px; */
-        }
-
-        md-outlined-button {
-            /* --md-sys-color-primary: rgb(25, 161, 86); */
-        }
-    </style>
+    <title>Get && Set</title>
 </head>
 
 <body>
     <div id="app" v-scope>
         <button @click="toggleName()">Toggle</button>
-        <div v-scope="{name:'Hello0'}">
-            一级嵌套:{{name}}
-            <div v-scope="{name:'Hello1'}">
-                二级嵌套:{{name}}
-                <div v-scope="customScope">
-                    三级嵌套:{{name}}
-                </div>
-            </div>
+        <div v-scope="customScope">
+            {{ name }}
         </div>
     </div>
     <script type="module">
         import { createApp, reactive } from '../src'        // 创建响应式状态
 
         const customData = reactive({
-            _name: { value: 'John' }
+            //  注意：reactive 只能包裹引用类型的值
+            _name: { value: "Click to Start" }
         });
         Object.defineProperty(customData, 'name', {
             get() {
@@ -44,7 +29,7 @@
             set(newValue) {
                 console.log("Setter：", newValue);
                 if (newValue < this._name.value) {
-                    console.warn("新值不能小于当前值");
+                    console.warn("The new value cannot be less than the current value");
                     return;
                 }
                 this._name.value = newValue;

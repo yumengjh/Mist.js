@@ -7,6 +7,7 @@ import { Block } from './block'
 import { Directive } from './directives'
 import { queueJob } from './scheduler'
 import { inOnce } from './walk'
+import { hasOwn } from './utils'
 export interface Context {
   key?: any
   scope: Record<string, any>
@@ -54,7 +55,7 @@ export const createScopedContext = (ctx: Context, data = {}): Context => {
       set(target, key, val, receiver) {
         // 当设置一个在当前作用域中不存在的属性时，
         // 不要在当前作用域中创建它，而是回退到父作用域。
-        if (receiver === reactiveProxy && !target.hasOwnProperty(key)) {
+        if (receiver === reactiveProxy && !hasOwn(target, key)) {
           return Reflect.set(parentScope, key, val)
         }
         return Reflect.set(target, key, val, receiver)

@@ -245,6 +245,33 @@ Mist.reactive()
   <button @click="localCount++">增加</button>
 </div>
 ```
+带**存取器**的全局状态：
+
+```js
+const customData = reactive({
+            //  注意：reactive 只能包裹引用类型的值，否则丢失响应式
+            _name: { value: "Click to Start" }
+        });
+        Object.defineProperty(customData, 'name', {
+            get() {
+                console.log("Getter");
+                return this._name.value;
+            },
+            set(newValue) {
+                console.log("Setter：", newValue);
+                if (newValue < this._name.value) {
+                    console.warn("The new value cannot be less than the current value");
+                    return;
+                }
+                this._name.value = newValue;
+            },
+            enumerable: true,   // 确保属性可枚举
+            configurable: true,  // 确保属性可配置
+        });
+```
+
+完整代码见 [存取器例子](https://github.com/yumengjh/Mist.js/tree/master/demo/accessor.html)
+
 ### 自定义指令
 
 ```js

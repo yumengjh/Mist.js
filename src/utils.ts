@@ -12,3 +12,6 @@ export const listen = (
 ) => {
   el.addEventListener(event, handler, options)
 }
+
+export const hasOwn = (obj: object, key: string | symbol) => 
+  Object.prototype.hasOwnProperty.call(obj, key)
